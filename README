@@ -1,4 +1,10 @@
 README
 
+->default database : test
 ->comment max 200 words
 ->event description max 100 chars
+->300s idle time
+->https:
+index
+login
+register

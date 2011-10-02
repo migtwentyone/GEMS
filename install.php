@@ -2,19 +2,32 @@
 if(isset($_POST['submitMySQL'])){
 	$TRACK=1;
 	if($f=fopen('config/mySQL.ini','w')){
-		$str='';
-		if($_POST['mySQLname']!='')
-			$str.='SQLuser = '.$_POST['mySQLname']."\n";
-		if($_POST['mySQLpassword']!='')
-			$str.='SQLpassword = '.$_POST['mySQLpassword']."\n";
-		if($_POST['mySQLserver']!='')
-			$str.='SQLserver = '.$_POST['mySQLserver']."\n";
-		if($_POST['mySQLport']!='')
-			$str.='SQLport = '.$_POST['mySQLport']."\n";
-		if($_POST['mySQLdatabase']!='')
-			$str.='SQLdatabase = '.$_POST['mySQLdatabase']."\n";
+		$str='SQLuser = ';
+		if($_POST['mySQLname']=='')
+			$str.=ini_get('mysql.default_user');
 		else
-			$str.='SQLdatabase = Database'.time()."\n";
+			$str.=$_POST['mySQLname'];
+		$str.="\nSQLpassword = ";
+		if($_POST['mySQLpassword']=='')
+			$str.=ini_get('mysql.default_password');
+		else
+			$str.=$_POST['mySQLpassword'];
+		$str.="\nSQLserver = ";
+		if($_POST['mySQLserver']=='')
+			$str.='localhost';
+		else
+			$str.=$_POST['mySQLserver']."\n";
+		$str.="\nSQLport = ";
+		if($_POST['mySQLport']=='')
+			$str.=3306;
+		else
+			$str.=$_POST['mySQLport'];
+		$str.="\nSQLdatabase = ";
+		if($_POST['mySQLdatabase']=='')
+			$str.='test';
+		else
+			$str.=$_POST['mySQLdatabase'];
+		$str.="\n";
 		fwrite($f,$str);
 		fclose($f);
 		require 'page/database.php';

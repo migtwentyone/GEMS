@@ -13,14 +13,6 @@ false if connection could not be made
 */
 function connectMySQL($pathh){
 	$mysql=parse_ini_file($pathh.'config/mySQL.ini');
-	if(!$mysql['SQLuser'])
-		$mysql['SQLuser']=ini_get("mysql.default_user");
-	if(!$mysql['SQLpassword'])
-		$mysql['SQLpassword']=ini_get("mysql.default_password");
-	if(!$mysql['SQLserver'])
-		$mysql['SQLserver']='localhost';
-	if(!$mysql['SQLport'])
-		$mysql['SQLport']=3306;
 	$c=@mysql_connect($mysql['SQLserver'].':'.$mysql['SQLport'],$mysql['SQLuser'],$mysql['SQLpassword']);
 	if(!$c)
 		return false;
