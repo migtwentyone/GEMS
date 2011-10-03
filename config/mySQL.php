@@ -5,8 +5,4 @@ if(!defined('TRACK')){
 	echo '<hr/>'.$_SERVER['SERVER_SIGNATURE'];
 	exit(1);
 }
-//administrator's homepage:
-/*
-all views, branchwise
-*/
-?>
+$SQLuser='root'; $SQLpassword='Heaven'; $SQLserver='localhost'; $SQLport='3306'; $SQLdatabase='website';  ?>

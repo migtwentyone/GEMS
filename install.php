@@ -1,35 +1,44 @@
 <?php
 if(isset($_POST['submitMySQL'])){
-	$TRACK=1;
-	if($f=fopen('config/mySQL.ini','w')){
-		$str='SQLuser = ';
+	if($f=fopen('config/mySQL.php','w')){
+		fwrite($f,'<?php
+if(!defined(\'TRACK\')){
+	header($_SERVER[\'SERVER_PROTOCOL\'].\' 403 Forbidden\');
+	echo \'<h1>403 Forbidden<h1><h4>You are not authorized to access the page.</h4>\';
+	echo \'<hr/>\'.$_SERVER[\'SERVER_SIGNATURE\'];
+	exit(1);
+}
+');
+		$str='$SQLuser=\'';
 		if($_POST['mySQLname']=='')
 			$str.=ini_get('mysql.default_user');
 		else
 			$str.=$_POST['mySQLname'];
-		$str.="\nSQLpassword = ";
+		$str.='\'; $SQLpassword=\'';
 		if($_POST['mySQLpassword']=='')
 			$str.=ini_get('mysql.default_password');
 		else
 			$str.=$_POST['mySQLpassword'];
-		$str.="\nSQLserver = ";
+		$str.='\'; $SQLserver=\'';
 		if($_POST['mySQLserver']=='')
 			$str.='localhost';
 		else
 			$str.=$_POST['mySQLserver']."\n";
-		$str.="\nSQLport = ";
+		$str.='\'; $SQLport=\'';
 		if($_POST['mySQLport']=='')
 			$str.=3306;
 		else
 			$str.=$_POST['mySQLport'];
-		$str.="\nSQLdatabase = ";
+		$str.='\'; $SQLdatabase=\'';
 		if($_POST['mySQLdatabase']=='')
 			$str.='test';
 		else
 			$str.=$_POST['mySQLdatabase'];
-		$str.="\n";
+		$str.='\'; ';
 		fwrite($f,$str);
+		fwrite($f,' ?>');
 		fclose($f);
+		define('TRACK','##$$');
 		require 'page/database.php';
 		header('Location: index.php');
 	} else

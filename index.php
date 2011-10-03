@@ -1,3 +1,14 @@
+<?php
+if(isset($_COOKIE['userid']))
+	header('Location: page/home.php');
+session_set_cookie_params(time()+300,'/');
+session_start();
+define('TRACK','##$$');
+$a=explode('.',$_SERVER['SERVER_ADDR']);
+$s=$a[0].$a[1].$_SERVER['HTTP_USER_AGENT'].session_id().'ashj23jkh35jkh35';
+$_SESSION['hasher']=md5(time());
+setcookie('check',md5($s.$_SESSION['hasher']),time()+300,'/');
+?>
 <html>
 <head>
  <title>
@@ -25,27 +36,9 @@
  <h3>
 	log in
  </h3>
- <table border=0 >
- <!--https-->
-     <form action="page/login.php?login" method="POST" onsubmit="return loginSubmit()" >
-	 <tr>
-     <td>Branch Passcode</td>
-	 <td><input type="password" name="passcode" /></td>
-	 </tr>
-	 <tr>
-     <td>Roll Number</td>
-	 <td><input type="text" name="roll" /></td>
-	 </tr>
-	 <tr>
-	 <td>Password</td>
-	 <td><input type="password" name="password" /></td>
-	 </tr>
-	 <tr>
-	 <td><input type="submit" value="Log In" /></td>
-	 <td><a href="page/forgotlogin.php" class="loginForm">Forgot your password?</a></td>
-	 </tr>
-     </form>
-    </table>
+ <?php 
+ $PATH='page/';
+ require_once('page/login_form.php'); ?>
  </div>
  <div id="register">
 	<a href="page/register.php">Register</a>

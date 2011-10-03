@@ -6,9 +6,9 @@ function bodyLoad(){
 		fields[i]=new Array();
 		for(j=document.forms[i].elements.length-1,k=0;j>=0;--j){
 			n=document.forms[i].elements[j];
-			if(n.name!="")
+			if(n.name!="" && n.type.toLowerCase()!="submit" && n.type.toLowerCase()!="hidden")
 				fields[i][k++]=n;
-			if((n.type=="text" || n.type=="password") && n.tagName.toLowerCase()=="input")
+			if(n.type.toLowerCase()=="text" || n.type.toLowerCase()=="password")
 				n.onfocus=Focus;
 		}
 	}

@@ -1,21 +1,28 @@
 <?php
-session_set_cookie_params(time()+300);
-session_start();
-if(!isset($_SESSION['TRACK'])){
-	header('Location: login.php?start');
-	die();
+session_set_cookie_params(time()+300,'/');
+if(isset($_COOKIE['userid'])){
+	$t=$_COOKIE['userid'];
+	setcookie('userid',$t,time()+300,'/');
 }
+session_start();
+define('TRACK','##$$');
 require_once('security.php');
-//var_dump($_SESSION);
 /*
 
-$_SESSION['user']['id']=$res[1];
-	$_SESSION['user']['name']=$res[0];
-	$_SESSION['user']['branch']=$res[2];
-	$_SESSION['user']['roll']=$rn;
+$_SESSION['userid']
 	setcookie('userid',$_SESSION['user']['id'],time()+300);echo time();
 	
 	*/
+if(isset($_GET['events']))
+	$mode='home_events';
+else if(isset($_GET['discuss']))
+	$mode='home_discuss';
+else if(isset($_GET['dashboard']))
+	$mode='home_dashboard';
+else if(isset($_GET['edit']))
+	$mode='home_editinfo';
+else
+	$mode='home_default';
 require_once('connectmysql.php');
 $c=connectMySQL('../');
 if(!$c)
@@ -26,12 +33,13 @@ if(!$c)
 	<title>
 		Home
 	</title>
+	<script type="text/javascript" src="../script/<?php echo $mode; ?>.js"></script>
 </head>
 <body>
 <div id="header">
 	Welcome!
 </div>
-<div id="content">
+<div id="area">
 	<div id="sidebar">
 	<ul>
 		<li><a href="home.php">Branch Home</a></li>
@@ -43,16 +51,7 @@ if(!$c)
 	</div>
 	<div id="content">
 <?php
-if(isset($_GET['events']))
-	require_once('home_events.php');
-else if(isset($_GET['discuss']))
-	require_once('home_discuss.php');
-else if(isset($_GET['dashboard']))
-	require_once('home_dashboard.php');
-else if(isset($_GET['edit']))
-	require_once('home_editinfo.php');
-else
-	require_once('home_default.php');
+require_once($mode.'.php');
 ?>
 	<div id="account">
 		Logged in as <a href="home.php?dashboard"><?php echo $_SESSION['user']['name']; ?></a>
