@@ -6,18 +6,20 @@ $email=$_POST['email'];
 $branch=intval($_POST['branch']);
 $course=intval($_POST['course']);
 $year=intval($_POST['year']);
-session_set_cookie_params(time()+30);
-session_start();
-$cap=$_SESSION['captcha'];
-session_destroy();
+define('TRACK','##$$');
+require_once('../module/recaptcha/recaptchalib.php');
+require_once('../config/recaptcha.php');
 try{
 	if(!isset($_POST['Submit']))
 		throw new Exception('');
-	//if($name==null || $pw==null || $rn==null || $branch==null || $course==null || $year==null)
-		//throw new Exception('Please fill all the fields!');
-	if(strcasecmp($cap,$_POST['captcha'])!=0)
-		throw new Exception('Please enter the security text correctly.');
-	var_dump($_SESSION);
+	if($name==null || $pw==null || $rn==null || $branch==null || $course==null || $year==null)
+		throw new Exception('Please fill all the fields!');
+	if(isset($_POST['recaptcha_response_field']))
+		$resp=recaptcha_check_answer($private,$_SERVER['REMOTE_ADDR'],$_POST['recaptcha_challenge_field'],$_POST['recaptcha_response_field']);
+	else
+		throw new Exception('Please fill the security text!');
+	if(!$resp->is_valid)
+		throw new Exception('Enter the security text correctly!');
 	if(!preg_match('/^[A-Za-z0-9]*$/',$rn) || strlen($rn)>12){
 		unset($rn);
 		throw new Exception('You entered an invalid Roll Number!');
@@ -33,9 +35,7 @@ try{
 	if(strlen($pw)<8)
 		throw new Exception('The password you entered is too short. Please Select another.');
 	$pw=md5($pw);
-	$TRACK=1;
 	require_once('connectmysql.php');
-	unset($TRACK);
 	$c=connectMySQL('../');
 	if(!c)
 		throw new Exception('Sorry! Some internal database error occured! Please try again later.');
@@ -90,6 +90,9 @@ if($c)
 <head>
 	<title>Register</title>
 	<script type="text/javascript" src="../script/register.js"></script>
+	<script type="text/javascript">
+		var RecaptchaOptions={ theme : 'blackglass' };
+	</script>
 </head>
 <body onload="bodyLoad()">
 <div id="header">
@@ -100,9 +103,9 @@ if($c)
 <div id="content">
 	<h3>Log In</h3>
 <?php echo $error; ?>
-	<table border=0 >
 	<!--https-->
-     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" onsubmit="return registerSubmit()" >
+     <form action="" method="post" onsubmit="return registerSubmit()" >
+	 <table border=0 >
 	 <tr>
      <td>Roll Number</td>
 	 <td><input type="text" name="roll" value="<?php echo $rn; ?>"/></td>
@@ -167,16 +170,11 @@ if($c)
 	 <option value=6>Other</option>
 	 </select></td>
 	 </tr>
-	 <tr>
-	 <td>Security Verification</td>
-	 <td><img src="../module/captcha/captcha.php" alt="Captcha" height=100 width=300 ><br/>
-	 <input type="text" name="captcha"</td>
-	 </tr>
-	 <tr>
-	 <td><input type="submit" value="Register" name="Submit"/></td>
-	 </tr>
+	 </table>
+	 <!-- recaptcha doesnt work in tables. I think due to iframes -->
+	 <br/>Enter Security Text:<?php echo recaptcha_get_html($public); ?>
+	 <input type="submit" value="Register" name="Submit"/></td>
      </form>
-    </table>
 </div>
 </div>
 <div id="footer">

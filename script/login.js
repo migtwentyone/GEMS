@@ -4,9 +4,9 @@ function bodyLoad(){
 	var j,n,k;
 	for(j=document.forms[0].elements.length-1,k=0;j>=0;--j){
 		n=document.forms[0].elements[j];
-		if(n.name!="")
+		if(n.name!="" && n.type.toLowerCase()!="submit" && n.type.toLowerCase()!="hidden")
 			fields[k++]=n;
-		if((n.type=="text" || n.type=="password") && n.tagName.toLowerCase()=="input")
+		if((n.type.toLowerCase()=="text" || n.type.toLowerCase()=="password"))
 			n.onfocus=Focus;
 	}
 	fields[fields.length-1].focus();

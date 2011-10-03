@@ -1,5 +1,5 @@
 <?php
-	if(!isset($TRACK)){
+	if(!defined('TRACK')){
 	header($_SERVER['SERVER_PROTOCOL'].' 403 Forbidden');
 	echo '<h1>403 Forbidden<h1><h4>You are not authorized to access the page.</h4>';
 	echo '<hr/>'.$_SERVER['SERVER_SIGNATURE'];
@@ -11,18 +11,19 @@
 		die('<br/>Error in connecting: '.mysql_error().' Please try installing again later!');
 	
 	try{
-	$q='CREATE TABLE `members` (`userid` INT(10) NOT NULL AUTO_INCREMENT,`rollno` VARCHAR(12) NOT NULL,`name` VARCHAR(50) NOT NULL,`branch_code` INT(2) NOT NULL,`password` VARCHAR(32) NOT NULL,`year` INT(1) NOT NULL,`course_code` INT(2) NOT NULL,`time` VARCHAR(15) NOT NULL,`email` VARCHAR(70) NOT NULL,`contact` VARCHAR(15),PRIMARY KEY (`userid`,`rollno`),UNIQUE (`rollno`));';
+	$q='CREATE TABLE `members` (`userid` INT(10) NOT NULL AUTO_INCREMENT,`rollno` VARCHAR(12) NOT NULL,`name` VARCHAR(50) NOT NULL,`branch_code` INT(2) NOT NULL,`password` VARCHAR(32) NOT NULL,`year` INT(1) NOT NULL,`course_code` INT(2) NOT NULL,`time` VARCHAR(15) NOT NULL,`email` VARCHAR(70) NOT NULL,`contact` VARCHAR(15),`type` INT(1) NOT NULL,PRIMARY KEY (`userid`,`rollno`),UNIQUE (`rollno`));';
+	//0-admin, 1-BR, 2-CR, 4-alumni, 5-MEM
 	if(mysql_query($q))
-		mysql_query("INSERT INTO `members` VALUES ('1000000000','0','Administrator','0','0','0','0','0','0');");
+		mysql_query("INSERT INTO `members` VALUES('1000000000','0','Administrator','0','0','0','0','0','0','0','0');");
 	else
 		throw new Exception('<br/>Error creating Table members');
-		$q='CREATE TABLE `br` (`userid` INT(10) NOT NULL,`branch_code` INT(2) NOT NULL,`branch_name` VARCHAR(70) NOT NULL,`passcode` VARCHAR(32) NOT NULL,UNIQUE (`branch_code`));';
+		$q='CREATE TABLE `br` (`userid` INT(10) NOT NULL,`branch_code` INT(2) NOT NULL,`branch_name` VARCHAR(70) NOT NULL,`passcode` VARCHAR(32) NOT NULL,PRIMARY KEY (`userid`),UNIQUE (`branch_code`));';
 	if(!mysql_query($q))
 		throw new Exception('<br/>Error creating Table br');
-	$q='CREATE TABLE `cr` (`userid` INT(10) NOT NULL,`course_code` INT(2) NOT NULL,`course_name` VARCHAR(50) NOT NULL,`branch_code` INT(2) NOT NULL,`duration` INT(1) NOT NULL,UNIQUE (`course_code`));';
+	$q='CREATE TABLE `cr` (`userid` INT(10) NOT NULL,`course_code` INT(2) NOT NULL,`course_name` VARCHAR(50) NOT NULL,`branch_code` INT(2) NOT NULL,`duration` INT(1) NOT NULL,PRIMARY KEY (`userid`),UNIQUE (`course_code`));';
 	if(!mysql_query($q))
 		throw new Exception('<br/>Error creating Table cr');
-	$q='CREATE TABLE `alumni` (`userid` INT(10) NOT NULL,`company` VARCHAR(100),`post` VARCHAR(100));';
+	$q='CREATE TABLE `alumni` (`userid` INT(10) NOT NULL,`company` VARCHAR(100),`post` VARCHAR(100),PRIMARY KEY (`userid`));';
 	if(!mysql_query($q))
 		throw new Exception('<br/>Error creating Table alumni');
 	$q='CREATE TABLE `cr_request` (`rollno` VARCHAR(12) NOT NULL,`name` VARCHAR(50) NOT NULL,`branch_code` INT(2) NOT NULL,`password` VARCHAR(32) NOT NULL,`year` INT(1) NOT NULL,`course_name` VARCHAR(50) NOT NULL,`email` VARCHAR(70) NOT NULL,`duration` INT(1) NOT NULL,`contact` VARCHAR(15));';
@@ -31,11 +32,13 @@
 	$q='CREATE TABLE `member_request` (`rollno` VARCHAR(12) NOT NULL,`name` VARCHAR(50) NOT NULL,`branch_code` INT(2) NOT NULL,`password` VARCHAR(32) NOT NULL,`year` INT(1) NOT NULL,`course_code` INT(2) NOT NULL,`email` VARCHAR(70) NOT NULL);';
 	if(!mysql_query($q))
 		throw new Exception('<br/>Error creating Table member_request');
-	$q='CREATE TABLE `interest` (`storyid` INT(10) NOT NULL AUTO_INCREMENT,`type` INT(1) NOT NULL,`userid` INT(10),PRIMARY KEY (`storyid`));';
+	$q='CREATE TABLE `interest` (`storyid` INT(10) NOT NULL,`type` INT(1) NOT NULL,`userid` INT(10),PRIMARY KEY (`storyid`));';
 	if(!mysql_query($q))
 		throw new Exception('<br/>Error creating Table Interest');
-	$q='CREATE TABLE `event` (`eventid` INT(10) NOT NULL AUTO_INCREMENT,`title` VARCHAR(50) NOT NULL,`time` VARCHAR(15) NOT NULL,`content` VARCHAR(1000) NOT NULL,`branch_code` INT(2),`userid` INT(10),PRIMARY KEY (`eventid`));';
-	if(!mysql_query($q))
+	$q='CREATE TABLE `event` (`eventid` INT(10) NOT NULL AUTO_INCREMENT,`title` VARCHAR(50) NOT NULL,`topic` VARCHAR(50) NOT NULL,`time` VARCHAR(15) NOT NULL,`content` VARCHAR(1000) NOT NULL,`branch_code` INT(2),`userid` INT(10),PRIMARY KEY (`eventid`));';
+	if(mysql_query($q))
+		mysql_query("INSERT INTO `event` VALUES('1000000000','0','0','0','0','0');");
+	else
 		throw new Exception('<br/>Error creating Table event');
 	$q='CREATE TABLE `score` (`storyid` INT(10) NOT NULL AUTO_INCREMENT,`branch_code` INT(2) NOT NULL,`points` INT(5) NOT NULL,`time` VARCHAR(15) NOT NULL,`eventid` INT(10),`comments` VARCHAR(200) NOT NULL,PRIMARY KEY (`storyid`));';
 	if(mysql_query($q))
@@ -49,15 +52,15 @@
 	/*
 	
 		
-	$q='CREATE TABLE `threads` (`threadid` INT(10) NOT NULL AUTO_INCREMENT,`thread` VARCHAR(50),`time` VARCHAR(15) NOT NULL,PRIMARY KEY (`threadid`));';
+	$q='CREATE TABLE `_threads` (`threadid` INT(10) NOT NULL AUTO_INCREMENT,`thread` VARCHAR(50),`time` VARCHAR(15) NOT NULL,PRIMARY KEY (`threadid`));';
 	if(!mysql_query($q))
 		throw new Exception('<br/>Error creating Table threads');
 	
-	$q='CREATE TABLE `comments` (`commentid` INT(10) NOT NULL AUTO_INCREMENT,`threadid` INT(10),`content` VARCHAR(200) NOT NULL,`time` VARCHAR(15) NOT NULL,`likes` INT(10) NOT NULL,`unlikes` INT(10) NOT NULL,`userid` INT(10),PRIMARY KEY (`commentid`));';
+	$q='CREATE TABLE `_comments` (`commentid` INT(10) NOT NULL AUTO_INCREMENT,`threadid` INT(10),`content` VARCHAR(200) NOT NULL,`time` VARCHAR(15) NOT NULL,`likes` INT(10) NOT NULL,`unlikes` INT(10) NOT NULL,`userid` INT(10),PRIMARY KEY (`commentid`));';
 	if(!mysql_query($q))
 		throw new Exception('<br/>Error creating Table Comments');
 	
-	$q='CREATE TABLE `interest` (`storyid` INT(10) NOT NULL AUTO_INCREMENT,`type` INT(1) NOT NULL,`userid` INT(10),PRIMARY KEY (`storyid`));';
+	$q='CREATE TABLE `_interest` (`commentid` INT(10) NOT NULL,`type` INT(1) NOT NULL,`userid` INT(10),PRIMARY KEY (`commentid`));';
 	if(!mysql_query($q))
 		throw new Exception('<br/>Error creating Table Interest');
 	

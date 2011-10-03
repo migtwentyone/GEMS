@@ -5,8 +5,6 @@ if(!defined('TRACK')){
 	echo '<hr/>'.$_SERVER['SERVER_SIGNATURE'];
 	exit(1);
 }
-//administrator's homepage:
-/*
-all views, branchwise
-*/
+$public='6LeJusgSAAAAAN7K1g6k4CqTv3rZOPHMR8A-FVyv';
+$private='6LeJusgSAAAAAN83HlC8WGPt7vAp4uzMbsXmtMbP';
 ?>
