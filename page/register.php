@@ -35,7 +35,7 @@ try{
 	if(strlen($pw)<8)
 		throw new Exception('The password you entered is too short. Please Select another.');
 	$pw=md5($pw);
-	require_once('connectmysql.php');
+	require_once('assets/connectmysql.php');
 	$c=connectMySQL('../');
 	if(!c)
 		throw new Exception('Sorry! Some internal database error occured! Please try again later.');

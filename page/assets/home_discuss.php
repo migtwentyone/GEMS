@@ -16,7 +16,7 @@ echo '</ul>';
 </div>
 <div id="commententry">
 
-<form action="register_comment.php" method="post" onsubmit="return registerComment()">
+<form action="assets/register_comment.php" method="post" onsubmit="return registerComment()">
 <textarea id="commentarea" name="comment" style="width:400px; height:100px">
 </textarea>
 <script type="text/javascript" >makeWhizzyWig("commentarea","formatblock fontname fontsize newline bold italic underline  | number bullet | undo redo | color hilite rule | link image table"); </script>

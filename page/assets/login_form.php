@@ -9,7 +9,8 @@ if(!defined('TRACK')){
 <table border=0 >
 	<!--https-->
      <form action="<?php echo $PATH; ?>login.php" method="post" onsubmit="return loginSubmit()" >
-	 <input type="hidden" name="parallel" value="<?php session_start(); echo $_SESSION['hasher']; ?>" />
+	 <input type="hidden" name="parallel" value="<?php echo 
+	 $parallel; unset($parallel); ?>" />
 	 <tr>
      <td>Branch Passcode</td>
 	 <td><input type="password" name="passcode" /></td>

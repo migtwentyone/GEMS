@@ -7,6 +7,8 @@ define('TRACK','##$$');
 $a=explode('.',$_SERVER['SERVER_ADDR']);
 $s=$a[0].$a[1].$_SERVER['HTTP_USER_AGENT'].session_id().'ashj23jkh35jkh35';
 $_SESSION['hasher']=md5(time());
+$_SESSION['parallel']=md5($_SESSION['hasher'].'etwe4654etwt');
+$parallel=$_SESSION['parallel'];
 setcookie('check',md5($s.$_SESSION['hasher']),time()+300,'/');
 ?>
 <html>
@@ -38,7 +40,7 @@ setcookie('check',md5($s.$_SESSION['hasher']),time()+300,'/');
  </h3>
  <?php 
  $PATH='page/';
- require_once('page/login_form.php'); ?>
+ require_once('page/assets/login_form.php'); ?>
  </div>
  <div id="register">
 	<a href="page/register.php">Register</a>

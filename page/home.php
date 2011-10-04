@@ -1,12 +1,7 @@
 <?php
-session_set_cookie_params(time()+300,'/');
-if(isset($_COOKIE['userid'])){
-	$t=$_COOKIE['userid'];
-	setcookie('userid',$t,time()+300,'/');
-}
-session_start();
 define('TRACK','##$$');
-require_once('security.php');
+$LOCATION='login.php?start=home';
+require_once('assets/security.php');
 /*
 
 $_SESSION['userid']
@@ -23,7 +18,7 @@ else if(isset($_GET['edit']))
 	$mode='home_editinfo';
 else
 	$mode='home_default';
-require_once('connectmysql.php');
+require_once('assets/connectmysql.php');
 $c=connectMySQL('../');
 if(!$c)
 	die('Could not Connect to Database! Please Try again Later.');
@@ -51,11 +46,11 @@ if(!$c)
 	</div>
 	<div id="content">
 <?php
-require_once($mode.'.php');
+require_once("assets/$mode.php");
 ?>
 	<div id="account">
-		Logged in as <a href="home.php?dashboard"><?php echo $_SESSION['user']['name']; ?></a>
-		<br/><a href="logout.php">Sign Out</a>
+		Logged in as <a href="home.php?dashboard"><?php 'name'; ?></a>
+		<br/><a href="assets/logout.php">Sign Out</a>
 	</div>
 	</div>
 	<div id="footer">

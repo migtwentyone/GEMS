@@ -5,7 +5,7 @@
 	echo '<hr/>'.$_SERVER['SERVER_SIGNATURE'];
 	exit(1);
 	}
-	require_once('page/connectmysql.php');
+	require_once('page/assets/connectmysql.php');
 	$c=connectMySQL('');
 	if(!$c)
 		die('<br/>Error in connecting: '.mysql_error().' Please try installing again later!');

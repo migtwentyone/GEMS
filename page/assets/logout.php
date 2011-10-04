@@ -10,6 +10,6 @@ if (ini_get("session.use_cookies")) {
 session_start();
 session_destroy();
 if(!isset($LOCATION))
-	$LOCATION='../index.php';
+	$LOCATION='../../index.php';
 header('Location: '.$LOCATION);
 ?>

@@ -39,7 +39,7 @@ if(!defined(\'TRACK\')){
 		fwrite($f,' ?>');
 		fclose($f);
 		define('TRACK','##$$');
-		require 'page/database.php';
+		require 'assets/page/database.php';
 		header('Location: index.php');
 	} else
 		header('Location: install.php');
@@ -63,7 +63,7 @@ if(!defined(\'TRACK\')){
 		<h3>MySQL Configuration</h3>
 		<br/><em>Leave the fields blank for default values.</em>
     <table border=0>
-		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+		<form action="" method="post">
 		<tr>
 			<td>Username</td>
 			<td><input type="text" name="mySQLname" /></td>
