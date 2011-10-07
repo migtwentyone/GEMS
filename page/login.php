@@ -6,6 +6,12 @@ session_start();
 define('TRACK','##$$');
 $a=explode('.',$_SERVER['SERVER_ADDR']);
 $s=$a[0].$a[1].$_SERVER['HTTP_USER_AGENT'].session_id().'ashj23jkh35jkh35';
+if(isset($_GET['start']))
+	if( in_array($_GET['start'].'.php', array_slice(scandir(realpath('')),3)) )
+		$dest=$_GET['start'];
+if(isset($_GET['action']))
+	if(preg_match('/^[A-Za-z0-9_]+/',$_GET['action']))
+		$action=$_GET['action'];
 if(!isset($_POST['loginsubmit'])){
 	$_SESSION['hasher']=md5(time());
 	$_SESSION['parallel']=md5($_SESSION['hasher'].'etwe4654etwt');
@@ -34,28 +40,24 @@ else{
 	$c=connectMySQL('../');
 	if(!c)
 		throw new Exception('Sorry! Some internal database error occured! Please try again later.');
-	$res=@mysql_query("SELECT `name` FROM `member_request` WHERE `rollno`='$rn';",$c);
-	if(!$res)
-		throw new Exception('Sorry! Some internal database error occured! Please try again later.');
+	$res=run_query("SELECT `name` FROM `member_request` WHERE `rollno`='$rn';",$c);
 	if(mysql_fetch_row($res))
 		throw new Exception('The registration request for Roll Number '.$rn.' is Pending. Please retry Logging in after some time.');
-	$res=@mysql_query("SELECT `members`.`name`,`members`.`userid`,`br`.`branch_code` FROM `members`,`br` WHERE `members`.`rollno`='$rn' AND `members`.`branch_code`=`br`.`branch_code` AND `br`.`passcode`='$pc' AND `members`.`password`='$pw';",$c);
-	if(!$res)
-		throw new Exception('Sorry! Some internal database error occured! Please try again later.');
+	$res=run_query("SELECT `members`.`name`,`members`.`userid`,`br`.`branch_code` FROM `members`,`br` WHERE `members`.`rollno`='$rn' AND `members`.`branch_code`=`br`.`branch_code` AND `br`.`passcode`='$pc' AND `members`.`password`='$pw';",$c);
 	$res=@mysql_fetch_row($res);
 	if(!$res)
 		throw new Exception('The Roll Number and Password you entered is not Registered with the associated Branch. Please Check!');
 	$t=time();
-	if(!@mysql_query("UPDATE `members` SET `time`='$t' WHERE `userid`='{$res[1]}' AND `rollno`='$rn';"))
+	if(!run_query("UPDATE `members` SET `time`='$t' WHERE `userid`='{$res[1]}' AND `rollno`='$rn';",$c))
 		throw new Exception('The Login could not be registered! Please try again later.');
 	$_SESSION['TRACKLOGGED']=1098;
 	$_SESSION['userid']=$res[1];
 	setcookie('userid',$_SESSION['userid'],time()+300,'/');
-	$dest='home.php';
-	if(preg_match('/^[A-Za-z0-9_]+.php$/',$_GET['start']))
-		if( in_array($_GET['start'].'.php', array_slice(scandir(realpath('')),3)) )
-			$dest=$_GET['start'];
-	header('Location: '.$dest);
+	if(isset($action))
+		$action='?'.$action;
+	if(!isset($dest))
+		$dest='home';
+	header("Location: $dest.php$action");
 } catch(Exception $e){
 	$error=$e->getMessage();
 }}
@@ -80,6 +82,11 @@ if($c)
 <?php
 echo $error;
 $PATH='';
+if(isset($dest)){
+	$QUERY='?start='.$dest;
+	if(isset($action))
+		$QUERY.='&action='.$action;
+}
 require_once('assets/login_form.php');
 ?>
 </div>

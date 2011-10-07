@@ -20,4 +20,10 @@ function connectMySQL($pathh){
 		return false;
 	return $c;
 }
+function run_query($str,$con){
+	$res=@mysql_query($str,$con);
+	if(!$res)
+		throw new Exception('MySQL Error: '.mysql_error());
+	return $res;
+}
 ?>

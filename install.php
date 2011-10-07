@@ -39,7 +39,7 @@ if(!defined(\'TRACK\')){
 		fwrite($f,' ?>');
 		fclose($f);
 		define('TRACK','##$$');
-		require 'assets/page/database.php';
+		require 'page/assets/database.php';
 		header('Location: index.php');
 	} else
 		header('Location: install.php');

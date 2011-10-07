@@ -8,7 +8,7 @@ if(!defined('TRACK')){
 ?>
 <table border=0 >
 	<!--https-->
-     <form action="<?php echo $PATH; ?>login.php" method="post" onsubmit="return loginSubmit()" >
+     <form action="<?php echo $PATH.'login.php'.$QUERY; ?>" method="post" onsubmit="return loginSubmit()" >
 	 <input type="hidden" name="parallel" value="<?php echo 
 	 $parallel; unset($parallel); ?>" />
 	 <tr>

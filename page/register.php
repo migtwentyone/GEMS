@@ -39,46 +39,32 @@ try{
 	$c=connectMySQL('../');
 	if(!c)
 		throw new Exception('Sorry! Some internal database error occured! Please try again later.');
-	$res=@mysql_query("SELECT `name`,`email` FROM `members` WHERE `rollno`='$rn';",$c);
-	if($res){
-		$res=@mysql_fetch_row($res);
-		if($res)
-			throw new Exception("The Roll Number you entered is already Registered with the name '{$res[0]}'.");
-		if($res[1]==$email){
-			unset($email);
-			throw new Exception("The email you entered is already associated with an acoount. Please choose another one.");
-		}
+	$res=run_query("SELECT `name`,`email` FROM `members` WHERE `rollno`='$rn';",$c);
+	$res=@mysql_fetch_row($res);
+	if($res)
+		throw new Exception("The Roll Number you entered is already Registered with the name '{$res[0]}'.");
+	if($res[1]==$email){
+		unset($email);
+		throw new Exception("The email you entered is already associated with an acoount. Please choose another one.");
 	}
-	else
-		throw new Exception('Sorry! Some internal database error occured! Please try again later.');
-	$res=@mysql_query("SELECT `name`,`email` FROM `member_request` WHERE `rollno`='$rn';",$c);
-	if($res){
-		$res=@mysql_fetch_row($res);
-		if($res)
-			throw new Exception("A request with the roll Number you entered is Pending with the name '{$res[0]}'.");
-		if($res[1]==$email){
-			unset($email);
-			throw new Exception("The email you entered is already associated with another Request. Please choose another one.");
-		}
+	$res=run_query("SELECT `name`,`email` FROM `member_request` WHERE `rollno`='$rn';",$c);
+	$res=@mysql_fetch_row($res);
+	if($res)
+		throw new Exception("A request with the roll Number you entered is Pending with the name '{$res[0]}'.");
+	if($res[1]==$email){
+		unset($email);
+		throw new Exception("The email you entered is already associated with another Request. Please choose another one.");
 	}
-	else
-		throw new Exception('Sorry! Some internal database error occured! Please try again later.');
-	$res=@mysql_query("SELECT count(*) FROM `cr` WHERE `branch_code`='$branch' AND `course_code`='$course' AND `duration`>=$year;",$c);
-	if($res){
-		$res=@mysql_fetch_row($res);
-		if(!$res[0])
-			throw new Exception('The details you have entered are inconsistent. Please Check!');
-		else{
-			$res=@mysql_query("INSERT INTO `member_request` VALUES ('$rn','$name','$branch','$pw','$year','$course','$email');",$c);
-			if(!$res)
-				throw new Exception('Sorry! Your request could not be registered! Please try again later.');
-			unset($rn);
-			unset($name);
-			throw new Exception('Your request for roll number '.$rn.' has been registered with the Class Rep! Your account will be now be activated.');
-		}
+	$res=run_query("SELECT count(*) FROM `cr` WHERE `branch_code`='$branch' AND `course_code`='$course' AND `duration`>=$year;",$c);
+	$res=@mysql_fetch_row($res);
+	if(!$res[0])
+		throw new Exception('The details you have entered are inconsistent. Please Check!');
+	else{
+		$res=run_query("INSERT INTO `member_request` VALUES ('$rn','$name','$branch','$pw','$year','$course','$email');",$c);
+		unset($rn);
+		unset($name);
+		throw new Exception('Your request for roll number '.$rn.' has been registered with the Class Rep! Your account will be now be activated.');
 	}
-	else
-		throw new Exception('Sorry! Some internal database error occured! Please try again later.');
 } catch(Exception $e){
 	if(($error=$e->getMessage())!='')
 	$error='<br/><div id="errordiv">'.$error.'</div><br/>';
