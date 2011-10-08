@@ -1,11 +1,12 @@
 <?php
 if(isset($_COOKIE['userid']))
 	header('Location: home.php');
-session_set_cookie_params(time()+300,'/');
-session_start();
 define('TRACK','##$$');
+require_once('../config/variables.php');
+session_set_cookie_params(time()+$TIME,'/');
+session_start();
 $a=explode('.',$_SERVER['SERVER_ADDR']);
-$s=$a[0].$a[1].$_SERVER['HTTP_USER_AGENT'].session_id().'ashj23jkh35jkh35';
+$s=$a[0].$a[1].$_SERVER['HTTP_USER_AGENT'].session_id().$KEY1;
 if(isset($_GET['start']))
 	if( in_array($_GET['start'].'.php', array_slice(scandir(realpath('')),3)) )
 		$dest=$_GET['start'];
@@ -14,9 +15,9 @@ if(isset($_GET['action']))
 		$action=$_GET['action'];
 if(!isset($_POST['loginsubmit'])){
 	$_SESSION['hasher']=md5(time());
-	$_SESSION['parallel']=md5($_SESSION['hasher'].'etwe4654etwt');
+	$_SESSION['parallel']=md5($_SESSION['hasher'].$KEY2);
 	$parallel=$_SESSION['parallel'];
-	setcookie('check',md5($s.$_SESSION['hasher']),time()+300,'/');
+	setcookie('check',md5($s.$_SESSION['hasher']),time()+$TIME,'/');
 	if(isset($_GET['start']))
 		$error='You must Login First';
 }
@@ -52,7 +53,7 @@ else{
 		throw new Exception('The Login could not be registered! Please try again later.');
 	$_SESSION['TRACKLOGGED']=1098;
 	$_SESSION['userid']=$res[1];
-	setcookie('userid',$_SESSION['userid'],time()+300,'/');
+	setcookie('userid',$_SESSION['userid'],time()+$TIME,'/');
 	if(isset($action))
 		$action='?'.$action;
 	if(!isset($dest))

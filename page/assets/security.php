@@ -5,13 +5,17 @@ if(!defined('TRACK')){
 	echo '<hr/>'.$_SERVER['SERVER_SIGNATURE'];
 	exit(1);
 }
-session_set_cookie_params(time()+300,'/');
+if(realpath('../config/variables.php'))
+	require_once('../config/variables.php');
+else
+	require_once('../../config/variables.php');
+session_set_cookie_params(time()+$TIME,'/');
 if(isset($_COOKIE['userid'])){
 	$t=$_COOKIE['userid'];
-	setcookie('userid',$t,time()+300,'/');
+	setcookie('userid',$t,time()+$TIME,'/');
 }
 $t=$_COOKIE['check'];
-setcookie('check',$t,time()+300,'/');
+setcookie('check',$t,time()+$TIME,'/');
 session_start();
 if(!isset($_SESSION['TRACKLOGGED']) || $_SESSION['userid']!=$_COOKIE['userid']){
 	$_SESSION['TRACKLOGGED']=1098;
@@ -19,7 +23,7 @@ if(!isset($_SESSION['TRACKLOGGED']) || $_SESSION['userid']!=$_COOKIE['userid']){
 	die();
 }
 $a=explode('.',$_SERVER['SERVER_ADDR']);
-$q=md5($a[0].$a[1].$_SERVER['HTTP_USER_AGENT'].session_id().'ashj23jkh35jkh35'.$_SESSION['hasher']);
+$q=md5($a[0].$a[1].$_SERVER['HTTP_USER_AGENT'].session_id().$KEY1.$_SESSION['hasher']);
 if($_COOKIE['check']!=$q)
 	require_once('logout.php');
 ?>

@@ -2,7 +2,7 @@ README
 
 ->default database : test
 ->comment max 200 words
-->event description max 100 chars
+->event description max 1000 chars
 ->300s idle time
 
 TODO list
@@ -16,4 +16,6 @@ any other form
 ->feedback page to report errors
 ->how to know that the roll no in session IS the roll number who actually logged in: is session data secure?
 ->prevent bot commenting
-->add run_query function in connectmysql for taking query as argument, runnng it, and returning result or error
+
+
+->facebox for viewing scores and personal info

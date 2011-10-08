@@ -44,22 +44,21 @@ try{
 		$query='='.$res[0];
 	$res=run_query("SELECT `activity` FROM `interest` WHERE `storyid`='$sid' AND `type`='$type' AND `userid`='{$_SESSION['userid']}';",$c);
 	$res=mysql_fetch_row($res);
-	if($res)
-		if($res[0]==$action)
-			throw new Exception('Already acted');
-		else{
-			run_query("UPDATE `interest` SET `activity`='$action' WHERE `storyid`='$sid' AND `type`='$type' AND `userid`='{$_SESSION['userid']}';",$c);
-			$r=run_query("SELECT `activity`,COUNT(*) FROM `interest` WHERE `storyid`='$sid' AND `type`='$type' GROUP BY `activity`;",$c);
-			while($res=mysql_fetch_row($r))
-				switch($res[0]){
-				case '1':	$likes=$res[1]; break;
-				case '2':	$unlikes=$res[1]; break;
-				case '3':	$neutral=$res[1];
-				}
-			run_query("UPDATE `$table` SET `likes`='$likes',`unlikes`='$unlikes',`neutral`='$neutral' WHERE `storyid`='$sid';",$c);
-		}
-	else{
-		run_query("INSERT INTO `interest` VALUES('$sid','$action','1','{$_SESSION['userid']}');",$c);
+	if($res && $res[0]!=$action){
+		run_query("UPDATE `interest` SET `activity`='$action' WHERE `storyid`='$sid' AND `type`='$type' AND `userid`='{$_SESSION['userid']}';",$c);
+		$r=run_query("SELECT `activity`,COUNT(*) FROM `interest` WHERE `storyid`='$sid' AND `type`='$type' GROUP BY `activity`;",$c);
+		while($res=mysql_fetch_row($r))
+			switch($res[0]){
+			case '1':	$likes=$res[1]; break;
+			case '2':	$unlikes=$res[1]; break;
+			case '3':	$neutral=$res[1];
+			}
+		run_query("UPDATE `$table` SET `likes`='$likes',`unlikes`='$unlikes',`neutral`='$neutral' WHERE `storyid`='$sid';",$c);
+	} else{
+		if($res)
+			run_query("DELETE FROM `interest` WHERE `storyid`='$sid' AND `activity`='$action' AND `type`='$type' AND `userid`='{$_SESSION['userid']}';",$c);
+		else
+			run_query("INSERT INTO `interest` VALUES('$sid','$action','1','{$_SESSION['userid']}');",$c);
 		$field=$action==1?'likes':($action==2?'unlikes':'neutral');
 		run_query("UPDATE `$table` SET `$field`=(SELECT COUNT(*) FROM `interest` WHERE `storyid`='$sid' AND `activity`='$action' AND `type`='$type') WHERE `storyid`='$sid';",$c);
 	}

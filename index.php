@@ -1,15 +1,16 @@
 <?php
 if(isset($_COOKIE['userid']))
 	header('Location: page/home.php');
-session_set_cookie_params(time()+300,'/');
-session_start();
 define('TRACK','##$$');
+require_once('config/variables.php');
+session_set_cookie_params(time()+$TIME,'/');
+session_start();
 $a=explode('.',$_SERVER['SERVER_ADDR']);
-$s=$a[0].$a[1].$_SERVER['HTTP_USER_AGENT'].session_id().'ashj23jkh35jkh35';
+$s=$a[0].$a[1].$_SERVER['HTTP_USER_AGENT'].session_id().$KEY1;
 $_SESSION['hasher']=md5(time());
-$_SESSION['parallel']=md5($_SESSION['hasher'].'etwe4654etwt');
+$_SESSION['parallel']=md5($_SESSION['hasher'].$KEY2);
 $parallel=$_SESSION['parallel'];
-setcookie('check',md5($s.$_SESSION['hasher']),time()+300,'/');
+setcookie('check',md5($s.$_SESSION['hasher']),time()+$TIME,'/');
 ?>
 <html>
 <head>
