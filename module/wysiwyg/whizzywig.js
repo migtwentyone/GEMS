@@ -23,7 +23,7 @@ function makeWhizzyWig(txtArea, controls){ // make a WhizzyWig from the textarea
  whizzies[whizzies.length]=idTa;
  if (!document.designMode) {
   if (idTa.nodeName=="TEXTAREA"){tagButs();}
-  alert("Whizzywig "+t("editor not available for your browser"));
+  alert("Rixh Text Editor "+t("not available for your browser"));
   return;
  }
  var taContent=o(idTa).defaultValue ? o(idTa).defaultValue : o(idTa).innerHTML ? o(idTa).innerHTML: ''; //anything in the textarea?
@@ -116,6 +116,9 @@ function makeWhizzyWig(txtArea, controls){ // make a WhizzyWig from the textarea
  o("CONTAINER"+idTa).appendChild(taObject);
  //end move
  idTa=null;
+ oW.focus();
+ xC("formatblock","<p>");
+oW.focus();
 } //end makeWhizzyWig
 function whizzywig(controls){
  var i,ta=document.getElementsByTagName('TEXTAREA');
@@ -164,7 +167,7 @@ function makeSelect(select){//assemble the <select> requested
 function tagButs(){
  w('<input type="button" onclick=\'doTag("<h1>")\' value="H1" title="<H1>"><input type="button" onclick=\'doTag("<h2>")\' value="H2" title="<H2>"><input type="button" onclick=\'doTag("<h3>")\' value="H3" title="<H3>"><input type="button" onclick=\'doTag("<h4>")\' value="H4" title="<H4>"><input type="button" onclick=\'doTag("<p>")\' value="P" title="<P>"><input type="button" onclick=\'doTag("<strong>")\' value="S" title="<STRONG>" style="font-weight:bold"><input type="button" onclick=\'doTag("<em>")\' value="E" title="<EM>" style="font-style:italic;"><input type="button" onclick=\'doTag("<li>")\' value="&bull;&mdash;" title="<LI>"><input type="button" onclick=\'doTag("<a>")\' value="@" title="<A HREF= >"><input type="button" onclick=\'doTag("<img>")\' value="[&hearts;]" title="<IMG SRC= >"><input type="button" onclick=\'doTag("<br />")\' value="&larr;" title="<BR />">');
 }
-function xC(c,o){return oW.document.execCommand(c,false,o)}
+function xC(c,o){ return oW.document.execCommand(c,false,o)}
 function makeSo(cm,op){//format selected text or line in the whizzy
  hideDialogs();
  oW.focus();
@@ -194,6 +197,7 @@ function makeSo(cm,op){//format selected text or line in the whizzy
   case "fullscreen":fullscreen(); break;
   default:xC(cm,op); break;
  }
+
  oW.focus();
 }
 function doSelect(selectname) {  //select on toolbar used - do it

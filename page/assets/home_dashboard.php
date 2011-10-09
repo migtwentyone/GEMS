@@ -5,5 +5,5 @@ if(!defined('TRACK')){
 	echo '<hr/>'.$_SERVER['SERVER_SIGNATURE'];
 	exit(1);
 }
-//dashboard: things to do and edit
+require_once('../n/member_request.php');
 ?>

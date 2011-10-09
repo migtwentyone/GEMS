@@ -18,6 +18,8 @@ try{
 	if($res[0]!=$brcode)
 		throw new Exception('You are not authorised to post this comment!');
 	$content=htmlspecialchars($_POST['comment']);
+	if(strlen($content)>500)
+		throw new Exception('Too long comment. Please reduce your words');
 	$time=time();
 	run_query("INSERT INTO `comments` VALUES(NULL,'{$_POST['threadid']}','$content','$time','{$_SESSION['userid']}','0','0','0');",$c);
 	run_query("UPDATE `threads` SET `time`='$time' WHERE `threadid` ='{$_POST['threadid']}';",$c);
@@ -28,6 +30,8 @@ try{
 	} else if(isset($_POST['thread'])){
 	
 	$thread=htmlspecialchars(filter_var($_POST['thread'],FILTER_SANITIZE_EMAIL));
+	if(strlen($thread)>100)
+		throw new Exception('Too long thread name');
 	$time=time();
 	run_query("INSERT INTO `threads` VALUES(NULL,'$brcode','$thread','$time','$time','{$_SESSION['userid']}');",$c);
 	$res=run_query("SELECT `threadid` FROM `threads` WHERE `userid`='{$_SESSION['userid']}' AND `created`='$time';",$c);

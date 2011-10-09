@@ -36,7 +36,7 @@
 	run_query($q,$c);
 	$q='CREATE TABLE `comments` (`storyid` INT(10) NOT NULL AUTO_INCREMENT,`threadid` INT(10),`content` VARCHAR(500) NOT NULL,`time` VARCHAR(15) NOT NULL,`userid` INT(10) NOT NULL,`likes` INT(10) NOT NULL,`unlikes` INT(10) NOT NULL,`neutral` INT(10) NOT NULL,PRIMARY KEY (`storyid`));';
 	run_query($q,$c);
-	$q='CREATE TABLE `updates` (`storyid` INT(10) NOT NULL AUTO_INCREMENT,`content` VARCHAR(200) NOT NULL,`time` VARCHAR(15) NOT NULL,`userid` INT(10) NOT NULL,`branch_code` INT(2),`likes` INT(10) NOT NULL,`unlikes` INT(10) NOT NULL,`neutral` INT(10) NOT NULL,PRIMARY KEY (`storyid`));';
+	$q='CREATE TABLE `updates` (`storyid` INT(10) NOT NULL AUTO_INCREMENT,`content` VARCHAR(500) NOT NULL,`time` VARCHAR(15) NOT NULL,`userid` INT(10) NOT NULL,`branch_code` INT(2),`likes` INT(10) NOT NULL,`unlikes` INT(10) NOT NULL,`neutral` INT(10) NOT NULL,PRIMARY KEY (`storyid`));';
 	run_query($q,$c);
 	} catch(Exception $e){
 		die($e->getMessage());

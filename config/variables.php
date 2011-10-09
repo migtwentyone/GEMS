@@ -11,5 +11,5 @@ $KEY1='23wedwre23w23';
 $KEY2='23r3rf276urd6gu7yru7';
 
 //session persistence time
-$TIME=300;
+$TIME=1800;
 ?>

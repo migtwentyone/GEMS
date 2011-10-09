@@ -34,7 +34,7 @@ try{
 	case 4:
 		$q="SELECT `branch_code` FROM `updates` WHERE `storyid`='$sid' AND (`branch_code`='0' OR `branch_code`='$brcode');";
 		$table='updates';
-		$location='../home.php?dashboard';
+		$location='../home.php';
 	}
 	$res=run_query($q,$c);
 	$res=mysql_fetch_row($res);
@@ -58,14 +58,14 @@ try{
 		if($res)
 			run_query("DELETE FROM `interest` WHERE `storyid`='$sid' AND `activity`='$action' AND `type`='$type' AND `userid`='{$_SESSION['userid']}';",$c);
 		else
-			run_query("INSERT INTO `interest` VALUES('$sid','$action','1','{$_SESSION['userid']}');",$c);
+			run_query("INSERT INTO `interest` VALUES('$sid','$action','$type','{$_SESSION['userid']}');",$c);
 		$field=$action==1?'likes':($action==2?'unlikes':'neutral');
 		run_query("UPDATE `$table` SET `$field`=(SELECT COUNT(*) FROM `interest` WHERE `storyid`='$sid' AND `activity`='$action' AND `type`='$type') WHERE `storyid`='$sid';",$c);
 	}
 	if(isset($_GET['ajax']))
 		echo '1';
 	else
-		header('Location: '.$location.$query);
+		header('Location: '.$location.(strrchr($location,'?')?$query:''));
 } catch(Exception $e){
 	if(isset($_GET['ajax']))
 		echo '0';

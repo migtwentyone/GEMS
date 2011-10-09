@@ -5,8 +5,6 @@ if(!defined('TRACK')){
 	echo '<hr/>'.$_SERVER['SERVER_SIGNATURE'];
 	exit(1);
 }
-//discuss=threadid
-//page=pageno
 echo '<script type="text/javascript" src="../module/wysiwyg/whizzywig.js"></script>';
 $threadid=intval($_GET['discuss']);
 echo '<div id="comments">';
@@ -71,18 +69,17 @@ echo '
 if($threadid){ ?>
 <div id="newcomment">
 <form action="assets/register_comment.php" method="post" onsubmit="return registerComment()">
-<input type="hidden" name="threadid" value="<?php echo $threadid; ?>" />
-<textarea id="commentarea" name="comment" style="width:400px; height:100px">
-</textarea>
-<script type="text/javascript" >makeWhizzyWig("commentarea","formatblock fontname fontsize newline bold italic underline  | number bullet | undo redo | color hilite rule | link image table"); </script>
-<input type="submit" value="Post" name="commentSubmit" />
+	<input type="hidden" name="threadid" value="<?php echo $threadid; ?>" />
+	<textarea id="commentarea" name="comment" style="width:500px;"></textarea>
+	<script type="text/javascript" >makeWhizzyWig("commentarea","formatblock fontname fontsize newline bold italic underline  | number bullet | undo redo | color hilite rule | link image table"); </script>
+	<input type="submit" value="Post" name="commentSubmit" />
 </form>
 </div>
 <?php } else { ?>
 <div id="newthread">
 <form action="assets/register_comment.php" method="post" onsubmit="return registerThread()">
-<input type="text" name="thread" />
-<input type="submit" name="threadSubmit" value="Create Thread" />
+	<input type="text" name="thread" />
+	<input type="submit" name="threadSubmit" value="Create Thread" />
 </form>
 </div>
 <?php } ?>
